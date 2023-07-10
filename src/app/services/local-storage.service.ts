@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, windowWhen } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ListType } from '../enums/list-type';
 import { Game } from '../interfaces/game';
 
