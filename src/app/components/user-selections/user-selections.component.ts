@@ -18,6 +18,9 @@ export class UserSelectionsComponent implements OnInit, OnDestroy {
   listTypeTitle: string;
   ownedGames: Game[];
   wishListGames: Game[];
+
+  dataSource: Game[];
+  displayedColumns = ['name', 'image', 'min_age', 'min_players', 'max_players', 'min_playtime', 'delete'];
   
   constructor(
     private route: ActivatedRoute,
@@ -33,16 +36,27 @@ export class UserSelectionsComponent implements OnInit, OnDestroy {
       this.localStorageService.ownedGames.pipe(
         takeUntil(this.unsubscribe),
         tap(games => {
-          console.log('subscription  data')
           this.ownedGames = games;
+          this.dataSource = this.ownedGames;
         })
       ).subscribe();
     } else {
       this.localStorageService.getGameList(ListType.WISHLIST);
       this.localStorageService.wishListGames.pipe(
         takeUntil(this.unsubscribe),
-        tap(games => this.wishListGames = games)
+        tap(games => {
+          this.wishListGames = games;
+          this.dataSource = this.wishListGames;
+        })
       ).subscribe();
+    }
+  }
+
+  deleteGame(game: Game) {
+    if (this.listType === ListType.OWNEDLIST) {
+      this.localStorageService.deleteGame(game, ListType.OWNEDLIST);
+    } else {
+      this.localStorageService.deleteGame(game, ListType.WISHLIST);
     }
   }
 
